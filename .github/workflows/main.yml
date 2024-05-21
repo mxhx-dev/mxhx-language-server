@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubunutu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: 4.3.4
+      - name: Set up Haxelib dependencies
+        run: |
+          haxelib install vscode-json-rpc --quiet
+          haxelib install language-server-protocol --quiet
+          haxelib git mxhx-rtti-resolver https://github.com/mxhx-dev/mxhx-rtti-resolver --quiet
+          haxelib dev mxhx-language-server ${{ github.workspace }}
+      - name: Build
+        run: haxe build.hxml
