@@ -1,6 +1,5 @@
 package mxhx.ls.providers;
 
-import mxhx.resolver.source.MXHXSourceResolver;
 import languageServerProtocol.Types.CompletionItemKind;
 import mxhx.ls.utils.SymbolTextUtils;
 import mxhx.ls.utils.SymbolKindUtils;
@@ -9,7 +8,6 @@ import languageServerProtocol.Types.CompletionItemTag;
 import mxhx.symbols.IMXHXSymbol;
 import mxhx.symbols.IMXHXTypeSymbol;
 import mxhx.ls.utils.MXHXNamespaceUtils;
-import haxeparser.Data.Definition;
 import haxe.extern.EitherType;
 import jsonrpc.CancellationToken;
 import jsonrpc.Protocol;
@@ -29,7 +27,7 @@ import mxhx.resolver.MXHXResolverTools;
 using mxhx.ls.extensions.PositionExtensions;
 
 class CompletionProvider {
-	private var resolver:MXHXSourceResolver;
+	private var resolver:IMXHXResolver;
 	private var mxhxDataLookup:Map<String, IMXHXData>;
 	private var sourceLookup:Map<String, String>;
 	private var completionSupportsSnippets:Bool;

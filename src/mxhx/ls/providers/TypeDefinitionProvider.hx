@@ -1,6 +1,5 @@
 package mxhx.ls.providers;
 
-import js.html.URL;
 import haxe.extern.EitherType;
 import jsonrpc.CancellationToken;
 import jsonrpc.Protocol;
@@ -12,9 +11,9 @@ import languageServerProtocol.Types.DocumentUri;
 import languageServerProtocol.protocol.TypeDefinition.TypeDefinitionParams;
 import languageServerProtocol.protocol.TypeDefinition.TypeDefinitionRequest;
 import mxhx.ls.utils.MXHXDataUtils;
+import mxhx.resolver.IMXHXResolver;
 import mxhx.symbols.IMXHXEnumFieldSymbol;
 import mxhx.symbols.IMXHXFieldSymbol;
-import mxhx.resolver.IMXHXResolver;
 import mxhx.symbols.IMXHXTypeSymbol;
 
 using mxhx.ls.extensions.PositionExtensions;
@@ -105,9 +104,14 @@ class TypeDefinitionProvider {
 			return;
 		}
 
-		final definitionUriAsString = Std.string(new URL('file:///${resolvedSymbol.file}'));
+		#if js
+		final definitionUriAsString = Std.string(new js.html.URL('file:///${resolvedSymbol.file}'));
+		#else
+		final definitionUriAsString = 'file:///${resolvedSymbol.file}';
+		#end
 		final definitionDocumentUri = new DocumentUri(definitionUriAsString);
 		var definitionSourceCode = sourceLookup.get(definitionUriAsString);
+		#if sys
 		if (definitionSourceCode == null) {
 			try {
 				definitionSourceCode = sys.io.File.getContent(resolvedType.file);
@@ -116,6 +120,7 @@ class TypeDefinitionProvider {
 				return;
 			}
 		}
+		#end
 		if (definitionSourceCode != null) {
 			final start = PositionExtensions.fromOffset(resolvedType.offsets.start, definitionSourceCode);
 			final end = PositionExtensions.fromOffset(resolvedType.offsets.end, definitionSourceCode);

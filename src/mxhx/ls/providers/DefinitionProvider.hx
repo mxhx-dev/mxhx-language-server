@@ -1,6 +1,5 @@
 package mxhx.ls.providers;
 
-import js.html.URL;
 import haxe.extern.EitherType;
 import jsonrpc.CancellationToken;
 import jsonrpc.Protocol;
@@ -85,9 +84,14 @@ class DefinitionProvider {
 			return;
 		}
 
-		final definitionUriAsString = Std.string(new URL('file:///${resolvedSymbol.file}'));
+		#if js
+		final definitionUriAsString = Std.string(new js.html.URL('file:///${resolvedSymbol.file}'));
+		#else
+		final definitionUriAsString = 'file:///${resolvedSymbol.file}';
+		#end
 		final definitionDocumentUri = new DocumentUri(definitionUriAsString);
 		var definitionSourceCode = sourceLookup.get(definitionUriAsString);
+		#if sys
 		if (definitionSourceCode == null) {
 			try {
 				definitionSourceCode = sys.io.File.getContent(resolvedSymbol.file);
@@ -96,6 +100,7 @@ class DefinitionProvider {
 				return;
 			}
 		}
+		#end
 		if (definitionSourceCode != null) {
 			final start = PositionExtensions.fromOffset(resolvedSymbol.offsets.start, definitionSourceCode);
 			final end = PositionExtensions.fromOffset(resolvedSymbol.offsets.end, definitionSourceCode);

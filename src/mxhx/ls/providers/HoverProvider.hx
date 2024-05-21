@@ -1,6 +1,5 @@
 package mxhx.ls.providers;
 
-import mxhx.ls.utils.SymbolTextUtils;
 import jsonrpc.CancellationToken;
 import jsonrpc.Protocol;
 import jsonrpc.ResponseError;
@@ -10,13 +9,8 @@ import languageServerProtocol.Types.MarkupKind;
 import languageServerProtocol.protocol.Protocol.HoverRequest;
 import languageServerProtocol.protocol.Protocol.TextDocumentPositionParams;
 import mxhx.ls.utils.MXHXDataUtils;
-import mxhx.symbols.IMXHXAbstractSymbol;
-import mxhx.symbols.IMXHXClassSymbol;
-import mxhx.symbols.IMXHXEnumSymbol;
-import mxhx.symbols.IMXHXFieldSymbol;
-import mxhx.symbols.IMXHXInterfaceSymbol;
+import mxhx.ls.utils.SymbolTextUtils;
 import mxhx.resolver.IMXHXResolver;
-import mxhx.symbols.IMXHXTypeSymbol;
 
 using mxhx.ls.extensions.PositionExtensions;
 
