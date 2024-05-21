@@ -48,16 +48,13 @@ class CompletionProvider {
 	private function onCompletion(params:CompletionParams, token:CancellationToken, resolve:Null<EitherType<Array<CompletionItem>, CompletionList>>->Void,
 			reject:ResponseError<NoData>->Void):Void {
 		final uriAsString = params.textDocument.uri.toString();
-		trace("completion: " + uriAsString);
 		final mxhxData = mxhxDataLookup.get(uriAsString);
 		if (mxhxData == null) {
-			trace("no MXHX data: " + uriAsString);
 			resolve(null);
 			return;
 		}
 		final sourceCode = sourceLookup.get(uriAsString);
 		if (sourceCode == null) {
-			trace("no source code: " + uriAsString);
 			resolve(null);
 			return;
 		}
@@ -72,7 +69,6 @@ class CompletionProvider {
 			unitData = unitData.parentUnit;
 		}
 		if (tagData == null) {
-			trace("no tag data: " + uriAsString);
 			resolve(null);
 			return;
 		}
@@ -134,8 +130,6 @@ class CompletionProvider {
 		}
 
 		final offsetSymbol = resolver.resolveTag(tagData);
-		trace("****** offsetTag: " + tagData);
-		trace("*** offsetSymbol: " + (offsetSymbol != null ? offsetSymbol.name : "null"));
 		if (offsetSymbol == null || isTagName) {
 			final parentSymbol = parentTag != null ? resolver.resolveTag(parentTag) : null;
 			if (parentSymbol != null) {
@@ -170,14 +164,12 @@ class CompletionProvider {
 
 		if (offsetSymbol is IMXHXClassSymbol) {
 			var attribute = MXHXDataUtils.getMXHXTagAttributeWithValueAtOffset(tagData, offset);
-			trace("attribute value: " + attribute);
 			if (attribute != null) {
 				mxhxAttributeCompletion(tagData, offset, items);
 				resolve(items);
 				return;
 			}
 			attribute = MXHXDataUtils.getMXHXTagAttributeWithNameAtOffset(tagData, offset, true);
-			trace("attribute name: " + attribute);
 			if (attribute != null && offset > (attribute.start + attribute.name.length)) {
 				// states not supported by MXHX yet
 				// mxhxStatesCompletion(offsetUnit, items);
@@ -344,21 +336,18 @@ class CompletionProvider {
 		// 						var prefixes = prefixMap.getPrefixesForUri(uri);
 		// 						for (otherPrefix in prefixes) {
 		// 							if (tagPrefix == otherPrefix) {
-		// 								trace("completing1: " + symbol.qname);
 		// 								createMXHXSymbolCompletionItem(symbol, false, null, null, false, false, nextChar, tagData, items);
 		// 							}
 		// 						}
 		// 					}
 		// 				}
 		// 				if (tagNamespacePackage != null && tagNamespacePackage == symbolPackageName) {
-		// 					trace("completing2: " + symbol.qname);
 		// 					createMXHXSymbolCompletionItem(symbol, false, null, null, false, false, nextChar, tagData, items);
 		// 				}
 		// 			} else {
 		// 				// no prefix yet, so complete the definition with a prefix
 		// 				var ns = MXHXNamespaceUtils.getMXHXNamespaceForSymbol(symbol, mxhxData, resolver);
 		// 				createMXHXSymbolCompletionItem(symbol, false, ns.prefix, ns.uri, false, true, nextChar, tagData, items);
-		// 				trace("completing3: " + symbol.qname, ns);
 		// 			}
 		// 		}
 		// 	}

@@ -29,23 +29,19 @@ class HoverProvider {
 
 	private function onHover(params:TextDocumentPositionParams, token:CancellationToken, resolve:Null<Hover>->Void, reject:ResponseError<NoData>->Void):Void {
 		final uriAsString = params.textDocument.uri.toString();
-		trace("hover: " + uriAsString);
 		final mxhxData = mxhxDataLookup.get(uriAsString);
 		if (mxhxData == null) {
-			trace("no MXHX data: " + uriAsString);
 			resolve(null);
 			return;
 		}
 		final sourceCode = sourceLookup.get(uriAsString);
 		if (sourceCode == null) {
-			trace("no source code: " + uriAsString);
 			resolve(null);
 			return;
 		}
 		final offset = params.position.toOffset(sourceCode);
 		final tagData = mxhxData.findTagOrSurroundingTagContainingOffset(offset);
 		if (tagData == null) {
-			trace("no tag data: " + uriAsString);
 			resolve(null);
 			return;
 		}
@@ -78,21 +74,19 @@ class HoverProvider {
 
 		final resolvedSymbol = MXHXDataUtils.getSymbolForMXHXNameAtOffset(tagData, offset, resolver);
 		if (resolvedSymbol == null) {
-			trace("no resolved symbol: " + uriAsString);
 			resolve(null);
 			return;
 		}
-		trace("resolved symbol: " + resolvedSymbol.name);
 
 		var contents = SymbolTextUtils.symbolToDetail(resolvedSymbol);
 		if (contents == null) {
-			trace("no contents: " + uriAsString);
 			resolve(null);
 			return;
 		}
 		contents = '```haxe\n${contents}\n```';
 		if (resolvedSymbol.doc != null && resolvedSymbol.doc.length > 0) {
 			contents += "\n\n---\n\n" + resolvedSymbol.doc;
+			trace(resolvedSymbol.doc);
 		}
 		resolve({
 			contents: {

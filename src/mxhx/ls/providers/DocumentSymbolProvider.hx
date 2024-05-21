@@ -33,16 +33,13 @@ class DocumentSymbolProvider {
 	private function onDocumentSymbol(params:DocumentSymbolParams, token:CancellationToken,
 			resolve:Null<Array<EitherType<SymbolInformation, DocumentSymbol>>>->Void, reject:ResponseError<NoData>->Void):Void {
 		final uriAsString = params.textDocument.uri.toString();
-		trace("document symbol: " + uriAsString);
 		final mxhxData = mxhxDataLookup.get(uriAsString);
 		if (mxhxData == null) {
-			trace("no MXHX data: " + uriAsString);
 			resolve(null);
 			return;
 		}
 		final sourceCode = sourceLookup.get(uriAsString);
 		if (sourceCode == null) {
-			trace("no source code: " + uriAsString);
 			resolve(null);
 			return;
 		}

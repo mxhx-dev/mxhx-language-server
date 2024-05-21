@@ -21,7 +21,6 @@ class MXHXDataUtils {
 	}
 
 	public static function getSymbolForMXHXNameAtOffset(tagData:IMXHXTagData, offset:Int, resolver:IMXHXResolver):IMXHXSymbol {
-		trace("*** getSymbolForMXHXNameAtOffset: " + tagData, tagData.start, tagData.isOffsetInAttributeList(offset));
 		if (tagData.isOffsetInAttributeList(offset)) {
 			return getSymbolForMXHXTagAttribute(tagData, offset, false, resolver);
 		}

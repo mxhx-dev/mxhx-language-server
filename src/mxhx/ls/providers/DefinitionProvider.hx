@@ -31,23 +31,19 @@ class DefinitionProvider {
 	private function onDefinition(params:DefinitionParams, token:CancellationToken, resolve:Null<EitherType<Definition, DefinitionLink>>->Void,
 			reject:ResponseError<NoData>->Void):Void {
 		final uriAsString = params.textDocument.uri.toString();
-		trace("definition: " + uriAsString);
 		final mxhxData = mxhxDataLookup.get(uriAsString);
 		if (mxhxData == null) {
-			trace("no MXHX data: " + uriAsString);
 			resolve(null);
 			return;
 		}
 		final sourceCode = sourceLookup.get(uriAsString);
 		if (sourceCode == null) {
-			trace("no source code: " + uriAsString);
 			resolve(null);
 			return;
 		}
 		final offset = params.position.toOffset(sourceCode);
 		final tagData = mxhxData.findTagOrSurroundingTagContainingOffset(offset);
 		if (tagData == null) {
-			trace("no tag data: " + uriAsString);
 			resolve(null);
 			return;
 		}
@@ -72,14 +68,11 @@ class DefinitionProvider {
 
 		final resolvedSymbol = MXHXDataUtils.getSymbolForMXHXNameAtOffset(tagData, offset, resolver);
 		if (resolvedSymbol == null) {
-			trace("no resolved symbol: " + uriAsString);
 			resolve(null);
 			return;
 		}
-		trace("resolved symbol: " + resolvedSymbol.name);
 
 		if (resolvedSymbol.file == null || resolvedSymbol.file.length == 0) {
-			trace("no file: " + uriAsString);
 			resolve(null);
 			return;
 		}
