@@ -1,29 +1,17 @@
 # MXHX Language Server
 
-A language server for [MXHX](https://mxhx.dev), a markup language for Haxe.
+**Warning:** This project is considered to be in early development, and it is not yet ready for integration with text editors and IDEs.
+
+A language server for [MXHX, a markup language for Haxe](https://mxhx.dev).
 
 ## Minimum Requirements
 
-- Haxe 4.0
+- Haxe 4.3
 
-## Installation
+## Build
 
-This library is not yet available on Haxelib, so you'll need to install it from Github.
+Run the following command in the root directory of this repository.
 
 ```sh
-haxelib git mxhx-language-server https://github.com/mxhx-dev/mxhx-language-server.git
-```
-
-## Project Configuration
-
-After installing the library above, add it to your Haxe _.hxml_ file.
-
-```hxml
---library mxhx-language-server
-```
-
-For Lime and OpenFL, add it to your _project.xml_ file.
-
-```xml
-<haxelib name="mxhx-language-server" />
+haxe build.hxml
 ```
