@@ -1,0 +1,13 @@
+-cp src
+-lib mxhx-parser
+-lib mxhx-symbols
+-lib mxhx-manifest
+-lib mxhx-source-resolver
+-lib haxeparser
+-lib vscode-json-rpc
+-lib language-server-protocol
+-lib hxnodejs
+-D js-es=6
+-D source-map
+--main mxhx.ls.MXHXLanguageServer
+--js bin/mxhx-ls.js

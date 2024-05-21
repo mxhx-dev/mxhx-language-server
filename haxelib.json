@@ -1,0 +1,11 @@
+{
+  "name": "mxhx-language-server",
+  "url": "https://mxhx.dev/",
+  "license": "Apache",
+  "tags": ["xml", "mxhx", "markup", "gui", "language-server"],
+  "description": "A language server for MXHX, a markup language for Haxe",
+  "version": "1.0.0",
+  "classPath": "src",
+  "contributors": ["bowlerhat"],
+  "releasenote": "Initial release"
+}
