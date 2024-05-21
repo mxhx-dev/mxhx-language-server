@@ -10,6 +10,7 @@
   "releasenote": "Initial release",
   "dependencies": {
     "vscode-json-rpc": "",
-    "language-server-protocol": ""
+    "language-server-protocol": "",
+    "mxhx-rtti-resolver": ""
   }
 }

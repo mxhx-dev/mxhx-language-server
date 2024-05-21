@@ -1,9 +1,5 @@
 -cp src
--lib mxhx-parser
--lib mxhx-symbols
--lib mxhx-manifest
--lib mxhx-source-resolver
--lib haxeparser
+-lib mxhx-rtti-resolver
 -lib vscode-json-rpc
 -lib language-server-protocol
 -lib hxnodejs
