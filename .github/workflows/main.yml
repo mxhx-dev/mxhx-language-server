@@ -20,6 +20,7 @@ jobs:
         run: |
           haxelib install vscode-json-rpc --quiet
           haxelib install language-server-protocol --quiet
+          haxelib install hxnodejs --quiet
           haxelib git mxhx-rtti-resolver https://github.com/mxhx-dev/mxhx-rtti-resolver --quiet
           haxelib dev mxhx-language-server ${{ github.workspace }}
       - name: Build
