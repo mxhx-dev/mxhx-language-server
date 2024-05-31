@@ -11,6 +11,6 @@
   "dependencies": {
     "vscode-json-rpc": "",
     "language-server-protocol": "",
-    "mxhx-rtti-resolver": ""
+    "mxhx-rtti-resolver": "git:https://github.com/mxhx-dev/mxhx-rtti-resolver.git"
   }
 }
