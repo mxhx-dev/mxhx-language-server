@@ -192,26 +192,24 @@ class CompletionProvider {
 				// types as child elements
 				// but we don't want to do that when in an attribute
 				var allowTypesAsChildren = defaultPropertyName != null && defaultPropertyName.length > 0;
-				if (!allowTypesAsChildren) {
+				/*if (!allowTypesAsChildren) {
 					// similar to [DefaultProperty], if a component implements
 					// mx.core.IContainer, we can instantiate types as children
-					// var containerInterface = project.getContainerInterface();
-					// allowTypesAsChildren = classDefinition.isInstanceOf(containerInterface, project);
-				}
+					var containerInterfaceSymbol = resolver.resolveQname("mx.core.IContainer");
+					if (containerInterfaceSymbol != null) {
+						allowTypesAsChildren = DefinitionUtils.extendsOrImplements(classSymbol, containerInterfaceSymbol);
+					}
+				}*/
 				if (allowTypesAsChildren) {
 					var filterType:IMXHXTypeSymbol = null;
 					if (defaultPropertyName != null) {
-						// TypeScope
-						// typeScope = (TypeScope)
-						// classDefinition.getContainedScope();
-						// Set<INamespaceDefinition>
-						// namespaceSet = ScopeUtils.getNamespaceSetForScopes(typeScope, typeScope, project);
-						// var propertiesByName = typeScope.getPropertiesByNameForMemberAccess((CompilerProject) project, defaultPropertyName, namespaceSet);
-						// if (propertiesByName.size() > 0) {
-						// 	IDefinition
-						// 	propertyDefinition = propertiesByName.get(0);
-						// 	typeFilter = DefinitionUtils.getMXMLChildElementTypeForDefinition(propertyDefinition, project);
-						// }
+						var propertySymbol = Lambda.find(classSymbol.fields, field -> field.name == defaultPropertyName);
+						if (propertySymbol != null) {
+							filterType = propertySymbol.type;
+							if (filterType != null && filterType.name == "Array" && filterType.pack.length == 0 && filterType.params.length > 0) {
+								filterType = filterType.params[0];
+							}
+						}
 					}
 
 					autoCompleteDefinitionsForMXHX(tagData, true, includeOpenTagBracket, nextChar, filterType, items);
