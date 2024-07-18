@@ -1,28 +1,28 @@
 package mxhx.ls.providers;
 
-import languageServerProtocol.Types.CompletionItemKind;
-import mxhx.ls.utils.SymbolTextUtils;
-import mxhx.ls.utils.SymbolKindUtils;
-import languageServerProtocol.Types.InsertTextFormat;
-import languageServerProtocol.Types.CompletionItemTag;
-import mxhx.symbols.IMXHXSymbol;
-import mxhx.symbols.IMXHXTypeSymbol;
-import mxhx.ls.utils.MXHXNamespaceUtils;
 import haxe.extern.EitherType;
 import jsonrpc.CancellationToken;
 import jsonrpc.Protocol;
 import jsonrpc.ResponseError;
 import jsonrpc.Types.NoData;
 import languageServerProtocol.Types.CompletionItem;
+import languageServerProtocol.Types.CompletionItemKind;
+import languageServerProtocol.Types.CompletionItemTag;
 import languageServerProtocol.Types.CompletionList;
+import languageServerProtocol.Types.InsertTextFormat;
 import languageServerProtocol.protocol.Protocol.CompletionParams;
 import languageServerProtocol.protocol.Protocol.CompletionRequest;
 import mxhx.internal.MXHXData;
+import mxhx.ls.utils.DefinitionUtils;
 import mxhx.ls.utils.MXHXDataUtils;
+import mxhx.ls.utils.MXHXNamespaceUtils;
+import mxhx.ls.utils.SymbolKindUtils;
+import mxhx.ls.utils.SymbolTextUtils;
+import mxhx.resolver.IMXHXResolver;
 import mxhx.symbols.IMXHXClassSymbol;
 import mxhx.symbols.IMXHXFieldSymbol;
-import mxhx.resolver.IMXHXResolver;
-import mxhx.resolver.MXHXResolverTools;
+import mxhx.symbols.IMXHXSymbol;
+import mxhx.symbols.IMXHXTypeSymbol;
 
 using mxhx.ls.extensions.PositionExtensions;
 
@@ -246,9 +246,8 @@ class CompletionProvider {
 
 	private function autoCompleteDefinitionsForMXHX(tagData:IMXHXTagData, typesOnly:Bool, includeOpenTagBracket:Bool, nextChar:String,
 			filterType:IMXHXTypeSymbol, items:Array<CompletionItem>):Void {
-		// var symbols = ([] : Array<IMXHXSymbol>);
-		var symbols:Array<IMXHXSymbol> = null; // = resolver.getAllSymbols();
-		for (symbol in symbols) {
+		var types = resolver.getTypes();
+		for (symbol in types) {
 			var isType = (symbol is IMXHXTypeSymbol);
 			if (!typesOnly || isType) {
 				if (isType) {
@@ -259,9 +258,9 @@ class CompletionProvider {
 					if (typeSymbol.pack.indexOf("_internal") != -1) {
 						continue;
 					}
-					// if (filterType != null && !DefinitionUtils.extendsOrImplements(project, typeDefinition, typeFilter)) {
-					// 	continue;
-					// }
+					if (filterType != null && !DefinitionUtils.extendsOrImplements(typeSymbol, filterType.qname)) {
+						continue;
+					}
 					var discoveredNS = MXHXNamespaceUtils.getMXHXNamespaceForSymbol(typeSymbol, tagData.parent, resolver);
 					createMXHXSymbolCompletionItem(symbol, false, discoveredNS.prefix, discoveredNS.uri, includeOpenTagBracket, true, nextChar, tagData, items);
 				} else {
